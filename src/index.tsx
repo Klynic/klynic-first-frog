@@ -18,295 +18,31 @@ app.frame('/', (c) => {
   const fruit = inputText || buttonValue
   return c.res({
     action: '/submit',
-    image: (
-      <div
-        style={{
-          alignItems: 'center',
-          background:'#ce9a9e',
-          backgroundSize: '100% 100%',
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'nowrap',
-          height: '100%',
-          justifyContent: 'center',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <div
-          style={{
-            color: '#251702 ',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        > How many Nfts do you own on the ETH blockchain? 
-        </div>
-      </div>
-    ),
+    image: 'https://cdn.pixabay.com/photo/2022/02/26/01/43/nft-7035115_640.jpg', 
     intents: [
-      <TextInput placeholder="Should I guess? (eth address)" />,
+      <TextInput placeholder="Enter your eth wallet address..." />,
       <Button value="eth">Just a feather-soft tap will do the trick!</Button>,
     ],
   })
 })
 
+  app.frame('/submit', (c) => {
+    const { buttonValue } = c
+    const client = new CovalentClient(`${process.env.COVALENT_KEY}`);
+    const neynar_client = new NeynarAPIClient(`${process.env.NEYNAR_API_KEY}`);
 
-app.frame('/submit', async (c) => {
-  const { buttonValue } = c
-  const client = new CovalentClient(`${process.env.COVALENT_KEY}`);
-  const neynar_client = new NeynarAPIClient(`${process.env.NEYNAR_API_KEY}`);
- 
-  let total_count
- 
-  try{
-  if (buttonValue === "eth") {
-    const resp = await client.NftService.getNftsForAddress("eth-mainnet");
-    console.log(resp.data);}
-}catch(e){
-  return c.res({
-    image: ( 
-      <div
-        style={{
-          alignItems: 'center',
-          background:
-            'hsla(265, 53%, 29%, 1)',
-          backgroundSize: '100% 100%',
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'nowrap',
-          height: '100%',
-          justifyContent: 'center',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <span
-          style={{
-            color: '#e36414',
-            fontSize: 60,
-            fontStyle: 'italic',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          No Activity found on this chain !
-        </span>
-
-        </div>
-        ),
-       intents:[
-        <Button.Reset>Go Back</Button.Reset>
-       ]
-  })
-}
-  try{
-  const user = await neynar_client.lookupUserByVerification(c.inputText as any);
-  return c.res({
-    image: (
-      <div
-        style={{
-          alignItems: 'center',
-          background:
-            'hsla(265, 53%, 29%, 1)',
-          backgroundSize: '100% 100%',
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'nowrap',
-          height: '100%',
-          justifyContent: 'center',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-               <span
-               style={{
-                 color: '#e36414',
-                 fontSize: 60,
-                 fontStyle: 'normal',
-                 letterSpacing: '-0.025em',
-                 lineHeight: 1.4,
-                 marginTop: 30,
-                 padding: '0 120px',
-                 whiteSpace: 'pre-wrap',
-               }}
-             >
-               {user.result.user.displayName}'s stats
-             </span>
-        <span
-          style={{
-            color: 'white',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          Total Transactions : {total_count}
-        </span>
-        <span
-          style={{
-            color: 'white',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          First Transaction : {earliest_trnasaction}
-        </span>
-
-        <span
-          style={{
-            color: 'white',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          Recent Transaction : {latest_transaction}
-        </span>
+    return c.res({
+      image: (
+        <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+          Selected: {buttonValue}
       </div>
     ),
-
-    intents: [
-      <Button.Link
-        href={earliest_trnasaction_hash as string}>Earliest Tx</Button.Link>,
-      <Button.Link
-        href={latest_transaction_hash as string}>Recent Tx</Button.Link>,
-        <Button.Reset>Go Back</Button.Reset>,
-    ]
+    intents:[
+      <Button.Link href="https://www.covalenthq.com/platform/#/">Free Covalent API key</Button.Link>,
+      <Button.Reset>Full Circle</Button.Reset>
+     ]
+   })
   })
-
-}catch(e){
-  try{
-  return c.res({
-    image: (
-      <div
-        style={{
-          alignItems: 'center',
-          background:
-            'hsla(265, 53%, 29%, 1)',
-          backgroundSize: '100% 100%',
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'nowrap',
-          height: '100%',
-          justifyContent: 'center',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <span
-          style={{
-            color: 'white',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          Total Transactions : {total_count}
-        </span>
-        <span
-          style={{
-            color: 'white',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          First Transaction : {earliest_trnasaction}
-        </span>
-
-        <span
-          style={{
-            color: 'white',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          Recent Transaction : {latest_transaction}
-        </span>
-      </div>
-    ),
-
-    intents: [
-      <Button.Link
-        href={earliest_trnasaction_hash as string}>Earliest Tx</Button.Link>,
-      <Button.Link
-        href={latest_transaction_hash as string}>Recent Tx</Button.Link>,
-        <Button.Reset>Go Back</Button.Reset>,
-    ]
-  })
-}catch(e){
-  return c.res({
-    image: ( 
-      <div
-        style={{
-          alignItems: 'center',
-          background:
-            'hsla(265, 53%, 29%, 1)',
-          backgroundSize: '100% 100%',
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'nowrap',
-          height: '100%',
-          justifyContent: 'center',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <span
-          style={{
-            color: '#e36414',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          No Activity found on this chain
-        </span>
-       
-      </div>
-    ),
-  })
-}
-}
-})
 
 devtools(app, { serveStatic })
 
